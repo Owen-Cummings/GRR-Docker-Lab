@@ -9,7 +9,7 @@ resource "docker_container" "nginx-grr-client" {
 
   networks_advanced {
     name          = var.network
-    ipv4_address  = "172.20.1.${count.index + 1}"
+    ipv4_address  = cidrhost(cidrsubnet(var.network_subnet, 8, 1), "${count.index + 1}")
   }
 
   provisioner "local-exec" {
@@ -29,10 +29,14 @@ resource "docker_container" "ubuntu-grr-client" {
 
   networks_advanced {
     name          = var.network
-    ipv4_address  = "172.20.2.${count.index + 1}"
+    ipv4_address  = cidrhost(cidrsubnet(var.network_subnet, 7, 1), "${count.index + 1}")
   }
 
   provisioner "local-exec" {
     command = "docker exec ubuntu-grr-client-${count.index} /start.sh"
   }
+}
+
+output "client_ips" {
+  value = concat(docker_container.nginx-grr-client.*.ip_address, docker_container.ubuntu-grr-client.*.ip_address)
 }

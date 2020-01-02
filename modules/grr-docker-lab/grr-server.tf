@@ -21,7 +21,7 @@ resource "docker_container" "grr-admin" {
   }
   networks_advanced {
     name          = var.network
-    ipv4_address  = var.grr_server_ip
+    ipv4_address  = cidrhost(var.network_subnet, 10)
   }
 
   cpu_set = "0-1"

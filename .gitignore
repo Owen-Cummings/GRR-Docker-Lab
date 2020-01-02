@@ -2,3 +2,5 @@
 *.tfstate
 
 .terraform/
+
+terraform.tfstate.backup
