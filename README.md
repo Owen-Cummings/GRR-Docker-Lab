@@ -1,6 +1,8 @@
 # GRR-Docker-Lab
 Local Google Rapid Response dev environment built with Terraform. Deploys specified number of Nginx and Ubuntu clients and enrolls them with the GRR server. A simple lab environment I've been using to work on a Google Rapid Response project.
 
+*Currently only tested on linux: will likely require tweaking for MacOS or Windows*
+
 ## Requirements
 - A working Docker instance
 - Terraform
