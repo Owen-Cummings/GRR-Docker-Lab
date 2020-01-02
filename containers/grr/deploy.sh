@@ -10,18 +10,18 @@ mkdir ~/.ssh/
 touch ~/.ssh/known_hosts
 for (( i=1; i<=$NGINX_CLIENT_COUNT; i++ ))
 do
-  j=(2$i)
-ssh-keyscan 172.20.0.$j >> ~/.ssh/known_hosts
-sshpass -p "$SSH_PASS" scp /usr/share/grr-server/executables/installers/grr_*_amd64.deb root@172.20.0.$j:/tmp/
-sshpass -p "$SSH_PASS" ssh root@172.20.0.$j "dpkg -i /tmp/grr_*_amd64.deb && dpkg -i /tmp/grr_*_amd64.deb && service grr start"
-sshpass -p "$SSH_PASS" ssh root@172.20.0.$j "service grr start"
+  #j=(2$i)
+ssh-keyscan 172.20.1.$i >> ~/.ssh/known_hosts
+sshpass -p "$SSH_PASS" scp /usr/share/grr-server/executables/installers/grr_*_amd64.deb root@172.20.1.$i:/tmp/
+sshpass -p "$SSH_PASS" ssh root@172.20.1.$i "dpkg -i /tmp/grr_*_amd64.deb && dpkg -i /tmp/grr_*_amd64.deb && service grr start"
+sshpass -p "$SSH_PASS" ssh root@172.20.1.$i "service grr start"
 done
 
 for (( i=1; i<=$UBUNTU_CLIENT_COUNT; i++ ))
 do
-  j=(4$i)
-ssh-keyscan 172.20.0.$j >> ~/.ssh/known_hosts
-sshpass -p "$SSH_PASS" scp /usr/share/grr-server/executables/installers/grr_*_amd64.deb root@172.20.0.$j:/tmp/
-sshpass -p "$SSH_PASS" ssh root@172.20.0.$j "dpkg -i /tmp/grr_*_amd64.deb && dpkg -i /tmp/grr_*_amd64.deb && service grr start"
-sshpass -p "$SSH_PASS" ssh root@172.20.0.$j "service grr start"
+  #j=($i)
+ssh-keyscan 172.20.2.$i >> ~/.ssh/known_hosts
+sshpass -p "$SSH_PASS" scp /usr/share/grr-server/executables/installers/grr_*_amd64.deb root@172.20.2.$i:/tmp/
+sshpass -p "$SSH_PASS" ssh root@172.20.2.$i "dpkg -i /tmp/grr_*_amd64.deb && dpkg -i /tmp/grr_*_amd64.deb && service grr start"
+sshpass -p "$SSH_PASS" ssh root@172.20.2.$i "service grr start"
 done

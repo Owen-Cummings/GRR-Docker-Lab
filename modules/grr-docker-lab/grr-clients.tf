@@ -5,14 +5,11 @@ resource "docker_container" "nginx-grr-client" {
   restart     = "always"
   working_dir = "/"
   depends_on  = [docker_network.grr-net]
-  env         = ["grr_user=${var.grr_user}",
-                "grr_pass=${var.grr_pass}",
-                "grr_server_ip=${var.grr_server_ip}",
-                "ssh_pass=${var.ssh_pass}"]
+  env         = ["ssh_pass=${var.ssh_pass}"]
 
   networks_advanced {
     name          = var.network
-    ipv4_address  = "172.20.0.${count.index + 21}"
+    ipv4_address  = "172.20.1.${count.index + 1}"
   }
 
   provisioner "local-exec" {
@@ -26,16 +23,13 @@ resource "docker_container" "ubuntu-grr-client" {
   name        = "ubuntu-grr-client-${count.index}"
   restart     = "always"
   working_dir = "/"
-  env         = ["grr_user=${var.grr_user}",
-                "grr_pass=${var.grr_pass}",
-                "grr_server_ip=${var.grr_server_ip}",
-                "ssh_pass=${var.ssh_pass}"]
+  env         = ["ssh_pass=${var.ssh_pass}"]
 
   depends_on = [docker_network.grr-net]
 
   networks_advanced {
     name          = var.network
-    ipv4_address  = "172.20.0.${count.index + 41}"
+    ipv4_address  = "172.20.2.${count.index + 1}"
   }
 
   provisioner "local-exec" {

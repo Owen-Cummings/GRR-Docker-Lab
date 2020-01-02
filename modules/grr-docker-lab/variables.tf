@@ -50,12 +50,12 @@ variable "ssh_pass" {
 
 variable "nginx_client_count" {
   type = number
-  description = "number of nginx servers to create"
-  default = 2
+  description = "Number of nginx servers to create"
+  default = 1
 }
 
 variable "ubuntu_client_count" {
   type = number
-  description = "number of ubuntu clients to create"
-  default = 2
+  description = "Number of ubuntu clients to create"
+  default = 1
 }

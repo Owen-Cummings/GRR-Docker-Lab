@@ -1,5 +1,7 @@
+
+
 provider "docker" {
-  host = "unix:///var/run/docker.sock"
+  host = "unix:///var/run/docker.sock"  //alter to your docker location
 }
 
 resource "random_password" "password" {
@@ -23,6 +25,6 @@ resource "null_resource" "deploy-grr"{
   }
   provisioner "local-exec" {
     when    = destroy
-    command = "scripts/rmimages.sh"
+    command = "./scripts/rmimages.sh"
   }
 }

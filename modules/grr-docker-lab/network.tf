@@ -10,6 +10,6 @@ resource "docker_network" "grr-net"{
   }
 
   provisioner "local-exec" {
-    command = "scripts/buildimages.sh"
+    command = "./scripts/buildimages.sh"
   }
 }
