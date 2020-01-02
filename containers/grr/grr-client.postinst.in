@@ -1,0 +1,28 @@
+#!/bin/sh
+
+set -e
+
+NANNY="%(ClientBuilder.target_dir)/nanny.sh"
+DAEMON="%(ClientBuilder.target_dir)/%(Client.binary_name)"
+DAEMON_ARGS="--config=%(ClientBuilder.target_dir)/%(ClientBuilder.config_filename)"
+
+# This package is designed to work on systems with init.d, upstart, and systemd.
+case "$1" in
+  configure\)
+    /bin/chmod +x "${NANNY}"
+    ${DAEMON} ${DAEMON_ARGS} "--install"
+
+    /usr/sbin/service %(ClientBuilder.package_name) stop 2>/dev/null || true
+    /usr/sbin/service %(ClientBuilder.package_name) start 2>/dev/null
+  ;;
+
+  abort-upgrade|abort-remove|abort-deconfigure\)
+  ;;
+
+  *\)
+    echo "postinst called with unknown argument \`$1'" >&2
+    exit 1
+  ;;
+esac
+
+exit 0
