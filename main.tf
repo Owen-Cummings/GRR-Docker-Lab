@@ -10,7 +10,6 @@ locals {
   grr_pass            = "demo"  //set a password here to log into the GRR admin interface
   ssh_pass            = random_password.password.result   //password used by GRR server to ssh into clients
   network_subnet      = "172.20.0.0/16" //set network subnet here
-  ip                  = ""
 }
 
 resource "random_password" "password" {
