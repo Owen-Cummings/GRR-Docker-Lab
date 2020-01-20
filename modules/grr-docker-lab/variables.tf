@@ -18,12 +18,6 @@ variable "network_gateway"{
   default = "172.20.0.1"    //set default gateway here
 }
 
-variable "grr_server_ip" {
-  type = string
-  description = "IP of the GRR server"
-  default = "172.20.0.10"   //set ip here
-}
-
 variable "grr_server_hostname" {
   type = string
   description = "Hostname for GRR server"
@@ -58,4 +52,10 @@ variable "ubuntu_client_count" {
   type = number
   description = "Number of ubuntu clients to create"
   default = 1
+}
+
+variable "client_ips" {
+  type = list(string)
+  description = "list of client IP addresses"
+  default = [""]
 }

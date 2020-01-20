@@ -4,8 +4,9 @@ resource "docker_container" "nginx-grr-client" {
   name        = "nginx-grr-client-${count.index}"
   restart     = "always"
   working_dir = "/"
+  env         = ["SSH_PASS=${var.ssh_pass}"]
+
   depends_on  = [docker_network.grr-net]
-  env         = ["ssh_pass=${var.ssh_pass}"]
 
   networks_advanced {
     name          = var.network
@@ -23,7 +24,7 @@ resource "docker_container" "ubuntu-grr-client" {
   name        = "ubuntu-grr-client-${count.index}"
   restart     = "always"
   working_dir = "/"
-  env         = ["ssh_pass=${var.ssh_pass}"]
+  env         = ["SSH_PASS=${var.ssh_pass}"]
 
   depends_on = [docker_network.grr-net]
 

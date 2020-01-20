@@ -12,12 +12,6 @@ locals {
   network_subnet      = "172.20.0.0/16" //set network subnet here
 }
 
-resource "random_password" "password" {
-  length            = 16
-  special           = true
-  override_special  = "_%@"
-}
-
 module "grr-docker-lab" {
   source              = "./modules/grr-docker-lab/"
   nginx_client_count  = local.nginx_client_count
@@ -26,6 +20,13 @@ module "grr-docker-lab" {
   ssh_pass            = local.ssh_pass
   network_subnet      = local.network_subnet
   network_gateway     = cidrhost(local.network_subnet, 1)
+  client_ips          = module.grr-docker-lab.client_ips
+}
+
+resource "random_password" "password" {
+  length            = 16
+  special           = true
+  override_special  = "_%@"
 }
 
 resource "null_resource" "build-grr-client"{
@@ -40,9 +41,8 @@ resource "null_resource" "build-grr-client"{
 }
 
 resource "null_resource" "deploy-grr"{
-  count = (local.nginx_client_count + local.ubuntu_client_count)
   depends_on  = [null_resource.build-grr-client]
   provisioner "local-exec" {
-    command   = "docker exec -e IP='${module.grr-docker-lab.client_ips[count.index]}' grr-admin /deploy.sh"
+    command   = "docker exec grr-admin /deploy.sh"
   }
 }
