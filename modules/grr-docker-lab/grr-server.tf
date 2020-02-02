@@ -2,32 +2,23 @@ resource "docker_container" "grr-admin" {
   image     = "grr-server:latest"
   name      = var.grr_server_hostname
   restart   = "always"
+  privileged= false
   env       = [ "ADMIN_PASSWORD=${var.grr_pass}",
-                "EXTERNAL_HOSTNAME=${var.grr_server_hostname}",
-                "SSH_PASS=${var.ssh_pass}",
-                "NGINX_CLIENT_COUNT=${var.nginx_client_count}",
-                "UBUNTU_CLIENT_COUNT=${var.nginx_client_count}",
-                "CLIENT_IPS=${join(",", var.client_ips)}"]
+                "EXTERNAL_HOSTNAME=${var.grr_server_hostname}"]
 
   depends_on = [docker_network.grr-net,
                 docker_container.nginx-grr-client,
                 docker_container.ubuntu-grr-client]
-  ports {
-    internal = 8000
-    external = 8000
-  }
-  
-  ports {
-    internal = 8080
-    external = 8080
+
+  volumes {
+    volume_name = "grr-deploy-data"
+    container_path = "/grr-deploy-data"
+    read_only = false
   }
 
   networks_advanced {
     name          = var.network
     ipv4_address  = cidrhost(var.network_subnet, 10)
   }
-
-  cpu_set = "0-1"
-  memory  = 2000
 
 }

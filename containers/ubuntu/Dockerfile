@@ -1,16 +1,17 @@
 #Custom ubuntu grr client
 FROM ubuntu:latest
 
-USER root
-
 WORKDIR /
 
 ADD . .
 
 RUN apt-get update && \
-    apt-get install -y openssh-server nano && \
-    mkdir /var/run/sshd
+    apt-get install -y sudo && \
+    groupadd -g 1000 grr && \
+    useradd -m -u 1000 -g grr grr-user
 
-EXPOSE 22
+RUN echo "grr-user    ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+USER grr-user
 
 CMD ["tail", "-f", "/dev/null"]

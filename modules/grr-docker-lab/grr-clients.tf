@@ -4,17 +4,17 @@ resource "docker_container" "nginx-grr-client" {
   name        = "nginx-grr-client-${count.index}"
   restart     = "always"
   working_dir = "/"
-  env         = ["SSH_PASS=${var.ssh_pass}"]
-
   depends_on  = [docker_network.grr-net]
+
+  volumes {
+    volume_name = "grr-deploy-data"
+    container_path = "/grr-deploy-data"
+    read_only = true
+  }
 
   networks_advanced {
     name          = var.network
     ipv4_address  = cidrhost(cidrsubnet(var.network_subnet, 8, 1), "${count.index + 1}")
-  }
-
-  provisioner "local-exec" {
-    command = "docker exec nginx-grr-client-${count.index} /start.sh"
   }
 }
 
@@ -24,20 +24,21 @@ resource "docker_container" "ubuntu-grr-client" {
   name        = "ubuntu-grr-client-${count.index}"
   restart     = "always"
   working_dir = "/"
-  env         = ["SSH_PASS=${var.ssh_pass}"]
 
   depends_on = [docker_network.grr-net]
+
+  volumes {
+    volume_name = "grr-deploy-data"
+    container_path = "/grr-deploy-data"
+    read_only = true
+  }
 
   networks_advanced {
     name          = var.network
     ipv4_address  = cidrhost(cidrsubnet(var.network_subnet, 7, 1), "${count.index + 1}")
   }
-
-  provisioner "local-exec" {
-    command = "docker exec ubuntu-grr-client-${count.index} /start.sh"
-  }
 }
 
-output "client_ips" {
-  value = concat(docker_container.nginx-grr-client.*.ip_address, docker_container.ubuntu-grr-client.*.ip_address)
+output "client_names" {
+  value = concat(docker_container.nginx-grr-client.*.name, docker_container.ubuntu-grr-client.*.name)
 }
