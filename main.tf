@@ -43,7 +43,6 @@ resource "null_resource" "deploy-grr"{
   depends_on  = [null_resource.build-grr-client]
   provisioner "local-exec" {
     command   = "docker exec -u grr-user ${module.grr-docker-lab.client_names[count.index]} /grr-deploy-data/clientdeploy.sh"
-    //command   = "docker exec -e IP='${module.grr-docker-lab.client_ips[count.index]}' grr-admin /deploy.sh"
   }
 }
 
